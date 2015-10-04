@@ -32,6 +32,7 @@ def search(query):
     return search_result
 
 
+
 def remove_stopword(words):
     return words
 

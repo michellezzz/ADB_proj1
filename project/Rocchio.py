@@ -1,14 +1,25 @@
 from collections import defaultdict
+import math
+
+
+def normalization(vector):
+    square_sum = 0
+    for key in vector:
+        square_sum += vector[key] * vector[key]
+    for key in vector:
+        vector[key] /= square_sum
+    return vector
+
 
 def silly_algo(document_list, query, alpha, beta, gamma):
-    query = query.split()
+    query = query.split()  # word space
     word_space = []
     for doc in document_list:
         for word in doc.title:
             if word not in word_space:
                 word_space.append(word)
 
-    vector = defaultdict(int)
+    vector = defaultdict(int)   # TF
     for doc in document_list:
         vector[doc.url] = defaultdict(int)
         for word in word_space:
@@ -16,6 +27,20 @@ def silly_algo(document_list, query, alpha, beta, gamma):
                 vector[doc.url][word] += 1
             else:
                 vector[doc.url][word] = 0
+
+    DF_vector = defaultdict(int)  # DF
+    for word in word_space:
+        for doc in document_list:
+            if word in doc.title:
+                DF_vector[word] += 1
+
+    score_vector = defaultdict(int)  # log(TF(w,d)+1)*log(IDF(w))
+    num_of_docs = len(document_list)
+    for doc in document_list:
+        score_vector[doc.url] = defaultdict(int)
+        for word in word_space:
+            score = math.log(vector[doc.url][word]+1)*math.log(float(num_of_docs)/DF_vector[word])
+            score_vector[doc.url][word] = score
 
     print "hi"
     for item in vector:
@@ -43,10 +68,12 @@ def silly_algo(document_list, query, alpha, beta, gamma):
         sum_relevant = 0
         sum_irrelevant = 0
         for doc in document_list:
+            score_vector[doc.url] = normalization(score_vector[doc.url])
             if doc.relevant == 'y':
-                sum_relevant += vector[doc.url][word]
+                sum_relevant += score_vector[doc.url][word]
             else:
-                sum_irrelevant += vector[doc.url][word]
+                sum_irrelevant += score_vector[doc.url][word]
+
         if num_relevant:
             new_query_vector[word] += beta * sum_relevant / float(num_relevant)
         if num_irrelevant:
