@@ -1,18 +1,64 @@
 from collections import defaultdict
 import math
+import copy
 
 
 def normalization(vector):
     square_sum = 0
     for key in vector:
         square_sum += vector[key] * vector[key]
+    if square_sum == 0:
+        return vector
     for key in vector:
         vector[key] /= square_sum
     return vector
 
 
-def silly_algo(document_list, query, alpha, beta, gamma):
-    query = query.split()  # word space
+def permutation(query, left):
+    '''
+    input: a list of word
+    output: a list of permutation
+    '''
+    if left == len(query):
+        return [query]
+    else:
+        result = []
+        for i in range(left, len(query)):
+            new_query = copy.deepcopy(query)
+            new_query[left], new_query[i] = new_query[i], new_query[left]
+            result.extend(permutation(new_query, left+1))
+    return result
+
+
+def change_order(query, document_list):   # query is a list of word
+    # calculate the bigram_dict
+    title_weight = 2
+    description_weight = 1
+    bigram_dict = defaultdict(float)
+    for doc in document_list:
+        for i in range(len(doc.title)-1):
+            bigram_dict[' '.join([doc.title[i], doc.title[i+1]])] += title_weight
+        for i in range(len(doc.description)-1):
+            bigram_dict[' '.join([doc.description[i], doc.description[i+1]])] += description_weight
+
+    # get permutation of query
+    query_list = permutation(query, 0)
+
+    # get the best query
+    best_score = 0
+    best_query = query
+    for query in query_list:
+        score = 0
+        for i in range(len(query)-1):
+            score += bigram_dict[' '.join([query[i], query[i+1]])]
+        if score > best_score:
+            best_score = score
+            best_query = query
+    return best_query
+
+
+def silly_algo(document_list, query, alpha, beta, gamma):  # based on title
+    query = query.split('%20')  # word space
     word_space = []
     for doc in document_list:
         for word in doc.title:
@@ -39,12 +85,13 @@ def silly_algo(document_list, query, alpha, beta, gamma):
     for doc in document_list:
         score_vector[doc.url] = defaultdict(int)
         for word in word_space:
-            score = math.log(vector[doc.url][word]+1)*math.log(float(num_of_docs)/DF_vector[word])
+            score = math.log(vector[doc.url][word]+1) * math.log(float(num_of_docs)/DF_vector[word]) # TODO
             score_vector[doc.url][word] = score
-
+    '''
     print "hi"
     for item in vector:
         print item, vector[item]
+    '''
 
     # generate vector for query
     query_vector = defaultdict(int)
@@ -94,8 +141,12 @@ def silly_algo(document_list, query, alpha, beta, gamma):
                 next_max_score = new_query_vector[word]
                 next_max_word = word
 
-    query.append(max_word)
-    query.append(next_max_word)
+    if max_word:
+        query.append(max_word)
+
+    query = change_order(query, document_list)  # query is a list of word
+    #if next_max_word:
+    #query.append(next_max_word)
     return '%20'.join(query)
 
 
