@@ -7,6 +7,7 @@ import string
 
 from document import *
 from Rocchio import *
+from stemming.porter2 import stem
 
 
 TEST = 1
@@ -22,7 +23,7 @@ for eachline in file:
     stop_word_list.append(eachline[0:-1])
 file.close()
 
-print stop_word_list
+# print stop_word_list
 
 
 def __print(message):
@@ -30,8 +31,12 @@ def __print(message):
         print message
 
 
-def search(query):
-    query = re.sub('[\s\t]+', "%20", query)
+def search(query):  # list of word
+    print '-'*11 + ' Query: ' + '-'*11
+    print '%-12s' % '|\n|' + '&'.join(query) + '\n%-12s' % '|'
+    print '-'*30
+
+    query = '%20'.join(query)
     bingUrl = 'https://api.datamarket.azure.com/Bing/Search/Web?Query=%27' + query + '%27&$top=10&$format=json'
     accountKeyEnc = base64.b64encode(accountKey + ':' + accountKey)
     headers = {'Authorization': 'Basic ' + accountKeyEnc}
@@ -40,7 +45,7 @@ def search(query):
     content = response.read()
     decoded_json = json.loads(content)
     search_result = decoded_json['d']['results']
-    return search_result, query
+    return search_result
 
 
 def remove_stopword(words):
@@ -58,7 +63,10 @@ def remove_punctuation(words):  # words is a string
 
 
 def stemming(words):
-    return words
+    result = []
+    for word in words:
+        result.append(stem(word))
+    return result
 
 
 def lower_case(words):  # words is a string
@@ -70,7 +78,7 @@ def process_doc(words):
     words = lower_case(words)
     words = words.encode("utf8").split()
     words = remove_stopword(words)
-    words = stemming(words)
+    # words = stemming(words)
     return words
 
 
@@ -82,21 +90,20 @@ if __name__ == "__main__":
     url_set = set()
     correctness = 0
     document_list = []
+    query = process_doc(query)
     while correctness < precision:
         correct = 0
         total = 0
 
         # search
-        query = query.lower()
-        search_result, query = search(query)
-        print search_result
+        search_result = search(query)
 
         # save result
         total = min(len(search_result), 10)
         if total == 0:
             print "Not enough result. System exit."
             sys.exit()
-        #print total
+
         for i in range(total):
             item = search_result[i]
 

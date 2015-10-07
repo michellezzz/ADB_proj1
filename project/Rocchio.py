@@ -58,7 +58,7 @@ def change_order(query, document_list):   # query is a list of word
 
 
 def silly_algo(document_list, query, alpha, beta, gamma):  # based on title
-    query = query.split('%20')  # word space
+    #query = query.split('%20')  # word space
     word_space = []
     for doc in document_list:
         for word in doc.title:
@@ -147,7 +147,7 @@ def silly_algo(document_list, query, alpha, beta, gamma):  # based on title
     query = change_order(query, document_list)  # query is a list of word
     #if next_max_word:
     #query.append(next_max_word)
-    return '%20'.join(query)
+    return query
 
 
 

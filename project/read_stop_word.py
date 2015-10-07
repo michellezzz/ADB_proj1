@@ -92,6 +92,7 @@ print stem("Bill Gates!")
 print stem("Gates")
 print stem("foxes")
 print stem("levis")
+print stem('|')
 
 
 def lower_case(words):  # words is a string
@@ -99,5 +100,18 @@ def lower_case(words):  # words is a string
 
 
 # test lower_case
-l = lower_cases("Hello, how ARe you, little RabBit?")
+l = lower_case("Hello, how ARe you, little RabBit?")
 print l
+
+
+
+def stemming(words):
+    result = []
+    for word in words:
+        result.append(stem(word))
+    return result
+
+
+# test stemming
+words = ['this', 'that', 'foxes', 'people', 'registration', 'levis', 'factionally']
+print stemming(words)
