@@ -58,7 +58,6 @@ def change_order(query, document_list):   # query is a list of word
 
 
 def silly_algo(document_list, query, alpha, beta, gamma):  # based on title
-    #query = query.split('%20')  # word space
     word_space = []
     for doc in document_list:
         for word in doc.title:
@@ -85,13 +84,8 @@ def silly_algo(document_list, query, alpha, beta, gamma):  # based on title
     for doc in document_list:
         score_vector[doc.url] = defaultdict(int)
         for word in word_space:
-            score = math.log(vector[doc.url][word]+1) * math.log(float(num_of_docs)/DF_vector[word]) # TODO
+            score = math.log(vector[doc.url][word]+1) * math.log(float(num_of_docs)/DF_vector[word])  # TODO
             score_vector[doc.url][word] = score
-    '''
-    print "hi"
-    for item in vector:
-        print item, vector[item]
-    '''
 
     # generate vector for query
     query_vector = defaultdict(int)

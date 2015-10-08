@@ -84,8 +84,26 @@ def process_doc(words):
 
 if __name__ == "__main__":
 
-    query = "Gates"  # TODO: as user input
-    precision = 0.9
+    if len(sys.argv) < 3:  #  check the way it is opened
+        print("Try again. Format: python bing.py precision query")
+        sys.exit()
+
+    try:
+        precision = float(sys.argv[1])
+        if not (0 < precision < 1):
+            print "Try again, precision should be in range (0, 1)"
+            sys.exit()
+    except Exception, e:
+        print "Try again. Format: python bing.py precision query"
+        sys.exit()
+
+    query = ' '.join(sys.argv[2:])
+
+    print precision
+    print query
+
+    #query = "taj mahal"  # TODO: as user input
+    #precision = 0.9
 
     url_set = set()
     correctness = 0
@@ -111,7 +129,10 @@ if __name__ == "__main__":
             print "%-12s" % "Title: ", item['Title'].encode("utf8")
             print "%-12s" % "URL: ", item['Url'].encode("utf8")
             print "%-12s" % "Description: ", item['Description'].encode("utf8")
-            relevant = raw_input("Is this document relevant? (y/n)")  # TODO input processing
+
+            relevant = raw_input("Is this document relevant? (y/n)")
+            while relevant not in ['y', 'n']:
+                relevant = raw_input("Please enter \'y\' or \'n\':")
             if relevant == 'y':
                 correct += 1
 

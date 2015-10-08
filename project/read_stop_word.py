@@ -115,3 +115,7 @@ def stemming(words):
 # test stemming
 words = ['this', 'that', 'foxes', 'people', 'registration', 'levis', 'factionally']
 print stemming(words)
+
+
+print float("0.9")
+print float("a")
