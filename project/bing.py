@@ -23,8 +23,6 @@ for eachline in file:
     stop_word_list.append(eachline[0:-1])
 file.close()
 
-# print stop_word_list
-
 
 def __print(message):
     if TEST:
@@ -102,9 +100,6 @@ if __name__ == "__main__":
     print precision
     print query
 
-    #query = "taj mahal"  # TODO: as user input
-    #precision = 0.9
-
     url_set = set()
     correctness = 0
     document_list = []
@@ -113,15 +108,14 @@ if __name__ == "__main__":
         correct = 0
         total = 0
 
-        # search
+        # search query
         search_result = search(query)
-
-        # save result
-        total = min(len(search_result), 10)
-        if total == 0:
+        total = len(search_result)
+        if total < 10:
             print "Not enough result. System exit."
             sys.exit()
 
+        # save result to document list
         for i in range(total):
             item = search_result[i]
 
@@ -137,7 +131,7 @@ if __name__ == "__main__":
                 correct += 1
 
             new_doc = document()
-            new_doc.title = process_doc(item['Title'])  # input a str, return a list
+            new_doc.title = process_doc(item['Title'])  # preprocess input a str, return a list
             new_doc.description = process_doc(item['Description'])
             new_doc.url = item['Url'].encode("utf8")
             new_doc.relevant = relevant
@@ -146,5 +140,5 @@ if __name__ == "__main__":
                 url_set.add(new_doc.url)
 
         correctness = correct/float(total)
-        query = silly_algo(document_list, query, alpha, beta, gamma)
+        query = silly_algo(document_list, query, alpha, beta, gamma)  # get new query
         print query
