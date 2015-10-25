@@ -1,12 +1,13 @@
-Project 1
+#Project 1
 http://www.cs.columbia.edu/~gravano/cs6111/proj1.html
 
-Team member: 
+---------------
+###Team member: 
 Moning Zhang(mz2499)
 Xingying Liu(xl2493)
 
-——————————————
-List of file
+----------------
+###List of file
 
 bing.py (main file)
 document.py 
@@ -15,18 +16,17 @@ stop.rtf (stopword list)
 stemming (folder)
 run_result.txt (run transcript)
 
-——————————————
-How to run:
+----------------
+###How to run:
 
 In terminal: python bing.py <precision> <query>
 example: python bing.py 0.9 gates
 
-——————————————
-Key:
-We+IL0UpPGqKJiHi0Nk2W9DgUdByhqNogVJ4VIEuUYw
+----------------
+###Key:
 
-——————————————
-Code description:
+----------------
+###Code description:
 
 The main algorithm for query extension is the Rocchio's algorithm. And the score we used is the tf-idf weighting.
 score[doc][word] = log(TF(w,d)+1)*log(IDF(w))
