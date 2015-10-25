@@ -1,11 +1,29 @@
 Project 1
 http://www.cs.columbia.edu/~gravano/cs6111/proj1.html
 
+Team member: 
+Moning Zhang(mz2499)
+Xingying Liu(xl2493)
+
+——————————————
+List of file
+
+bing.py (main file)
+document.py 
+Rocchio.py  (algorithm)
+stop.rtf (stopword list)
+stemming (folder)
+run_result.txt (run transcript)
+
 ——————————————
 How to run:
 
 In terminal: python bing.py <precision> <query>
 example: python bing.py 0.9 gates
+
+——————————————
+Key:
+We+IL0UpPGqKJiHi0Nk2W9DgUdByhqNogVJ4VIEuUYw
 
 ——————————————
 Code description:

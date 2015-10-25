@@ -11,7 +11,7 @@ from stemming.porter2 import stem
 
 
 TEST = 1
-accountKey = "##"
+accountKey = "We+IL0UpPGqKJiHi0Nk2W9DgUdByhqNogVJ4VIEuUYw"
 alpha = 1
 beta = 1
 gamma = 1
