@@ -24,6 +24,7 @@ example: python bing.py 0.9 gates
 
 ----------------
 ###Key:
+Your key
 
 ----------------
 ###Code description:
